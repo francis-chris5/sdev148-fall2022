@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine.SceneManagement;
+
 public class dragon : MonoBehaviour{
 
     private Transform transform;
@@ -24,7 +26,7 @@ public class dragon : MonoBehaviour{
 
         if(forward != 0 || sideways != 0){
             animator.SetBool("walking", true);
-            Vector3 newPosition = new Vector3(currentX - sideways*speed, currentY, currentZ + forward*speed);
+            Vector3 newPosition = new Vector3(currentX + sideways*speed, currentY, currentZ + forward*speed);
             transform.position = newPosition;
         }
         else{
@@ -44,4 +46,23 @@ public class dragon : MonoBehaviour{
             animator.SetBool("flying", false);
         }
     }//end update()
+
+
+
+    void OnCollisionEnter(Collision collision){
+        if(collision.gameObject.tag == "gateway"){
+            if(SceneManager.GetActiveScene().name == "desert"){
+               SceneManager.LoadScene("meadow"); 
+            }
+            else if(SceneManager.GetActiveScene().name == "meadow"){
+                SceneManager.LoadScene("desert");
+            }
+        }
+        else if(collision.gameObject.tag == "enemy"){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        else if(collision.gameObject.tag == "npc"){
+            Debug.Log("Why hello there...");
+        }
+    }
 }//end dragon class
